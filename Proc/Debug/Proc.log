@@ -1,0 +1,10 @@
+﻿  Performing Custom Build Tools
+  
+  Pro*C/C++: Release 12.1.0.2.0 - Production on Sat Nov 30 20:40:56 2019
+  
+  Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+  
+  System default option values taken from: c:\proc_sdk\precomp\admin\pcscfg.cfg
+  
+  Proc.c
+  Proc.vcxproj -> C:\Proc\Debug\Proc.exe
