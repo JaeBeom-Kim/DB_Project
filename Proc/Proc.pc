@@ -16,10 +16,22 @@ EXEC SQL END DECLARE SECTION;
 #define getch()  _getch()
 
 void main() {
+	init();
    DB_connect();
-   sql_select();
-   init_display();
-   getch();
+   //sql_select();
+   while(1){
+		init_display();
+		int menuCode = menuDraw();
+		if(menuCode == 0){
+			//고객등록
+		} else if(menuCode == 1){
+			//고객조회
+		} else if(menuCode == 2){
+			return 0;	//종료
+		}
+		system("cls");
+   }
+   return 0;
 }
 void sql_select(){
 	EXEC SQL BEGIN DECLARE SECTION;
@@ -30,21 +42,44 @@ void sql_select(){
 		int sal;
 		int deptno;
 
+		char c_name1[15];
+		char c_phone1[20];
+		char c_adrs1[50];
+		int c_point1;
+
+		char p_name1[15];
+		char p_birth1[15];
+		char p_sex1[1];
+		char p_neut1[1];
+		char p_aleg1[20];
+
 	EXEC SQL END DECLARE SECTION;
 
 
 	EXEC SQL select empno, ename, job, mgr, sal, deptno into : emp_no, :e_name, :job, :mgr, :sal, :deptno
 	from emp where sal = 5000;
 
+	//EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
+	//from customer where c_name = 'KimJaeBeom';
+	
+	EXEC SQL select p_name, p_birth, p_sex, p_neut, c_name, c_phone, p_aleg into :p_name1, :p_birth1, :p_sex1, :p_neut1, :c_name1, :c_phone1, :p_aleg1
+	from pet where p_name = 'Happy';
+
+	//EXEC SQL select count(*)
+
+
 	//printf("emp 테이블에서 연봉이 5000인 사원번호, 이름, 직무, 매니저의 사원번호, 부서번호를 출력\n\n");
 
 	//printf("사원번호 : %d, 이름 : %s, 직무 : %s, \n연봉 : %d, 부서번호 : %d", emp_no, e_name, job, sal, deptno);
+	//printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
+	//printf("전화번호 : %s", c_phone1); 
+	//printf("동물이름 : %s, 동물생일 : %s, 성별 : %s, 중성화 : %s, 알러지유무 : %s, 보호자이름 : %s, 보호자전화번호 : %s", p_name1, p_birth1, p_sex1, p_neut1, p_aleg1, c_name1, c_phone1);
 }
 
 void DB_connect() {
-   strcpy((char *)uid.arr, "AA20153263@//sedb.deu.ac.kr:1521/orcl");
+   strcpy((char *)uid.arr, "zstB3@//sedb.deu.ac.kr:1521/orcl");
    uid.len = (short) strlen((char *)uid.arr);
-   strcpy((char *)pwd.arr, "20153263");
+   strcpy((char *)pwd.arr, "sedb1234");
    pwd.len = (short) strlen((char *)pwd.arr);
    
    EXEC SQL CONNECT :uid IDENTIFIED BY :pwd;

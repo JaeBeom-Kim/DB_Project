@@ -60,16 +60,16 @@ static struct sqltdss sqltds =
 struct sqlcxp
 {
   unsigned short fillen;
-           char  filnam[16];
+           char  filnam[52];
 };
 static const struct sqlcxp sqlfpn =
 {
-    15,
-    "C:\\Proc\\Proc.pc"
+    51,
+    "C:\\DB_Project-master\\DB_Project-master\\Proc\\Proc.pc"
 };
 
 
-static unsigned int sqlctx = 2276835;
+static unsigned int sqlctx = 312557027;
 
 
 static struct sqlexd {
@@ -103,16 +103,16 @@ static struct sqlexd {
    unsigned int   sqcmod;
    unsigned int   sqfmod;
    unsigned int   sqlpfmem;
-            void  *sqhstv[6];
-   unsigned int   sqhstl[6];
-            int   sqhsts[6];
-            void  *sqindv[6];
-            int   sqinds[6];
-   unsigned int   sqharm[6];
-   unsigned int   *sqharc[6];
-   unsigned short  sqadto[6];
-   unsigned short  sqtdso[6];
-} sqlstm = {13,6};
+            void  *sqhstv[7];
+   unsigned int   sqhstl[7];
+            int   sqhsts[7];
+            void  *sqindv[7];
+            int   sqinds[7];
+   unsigned int   sqharm[7];
+   unsigned int   *sqharc[7];
+   unsigned short  sqadto[7];
+   unsigned short  sqtdso[7];
+} sqlstm = {13,7};
 
 /* SQLLIB Prototypes */
 extern void sqlcxt (void **, unsigned int *,
@@ -135,10 +135,12 @@ typedef struct { unsigned short len; unsigned char arr[1]; } varchar;
 /* cud (compilation unit data) array */
 static const short sqlcud0[] =
 {13,4130,1,0,0,
-5,0,0,1,96,0,4,36,0,0,6,0,0,1,0,2,3,0,0,2,97,0,0,2,97,0,0,2,3,0,0,2,3,0,0,2,3,
+5,0,0,1,96,0,4,59,0,0,6,0,0,1,0,2,3,0,0,2,97,0,0,2,97,0,0,2,3,0,0,2,3,0,0,2,3,
 0,0,
-44,0,0,0,0,0,27,50,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,10,0,0,1,10,0,0,
-75,0,0,3,0,0,31,68,0,0,0,0,0,1,0,
+44,0,0,2,126,0,4,65,0,0,7,0,0,1,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,0,
+2,97,0,0,2,97,0,0,
+87,0,0,0,0,0,27,85,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,10,0,0,1,10,0,0,
+118,0,0,4,0,0,31,103,0,0,0,0,0,1,0,
 };
 
 
@@ -166,10 +168,22 @@ struct { unsigned short len; unsigned char arr[20]; } pwd;
 #define getch()  _getch()
 
 void main() {
+	init();
    DB_connect();
-   sql_select();
-   init_display();
-   getch();
+   //sql_select();
+   while(1){
+		init_display();
+		int menuCode = menuDraw();
+		if(menuCode == 0){
+			//고객등록
+		} else if(menuCode == 1){
+			//고객조회
+		} else if(menuCode == 2){
+			return 0;	//종료
+		}
+		system("cls");
+   }
+   return 0;
 }
 void sql_select(){
 	/* EXEC SQL BEGIN DECLARE SECTION; */ 
@@ -180,6 +194,17 @@ void sql_select(){
 		int mgr;
 		int sal;
 		int deptno;
+
+		char c_name1[15];
+		char c_phone1[20];
+		char c_adrs1[50];
+		int c_point1;
+
+		char p_name1[15];
+		char p_birth1[15];
+		char p_sex1[1];
+		char p_neut1[1];
+		char p_aleg1[20];
 
 	/* EXEC SQL END DECLARE SECTION; */ 
 
@@ -266,15 +291,113 @@ void sql_select(){
 
 
 
+	//EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
+	//from customer where c_name = 'KimJaeBeom';
+	
+	/* EXEC SQL select p_name, p_birth, p_sex, p_neut, c_name, c_phone, p_aleg into :p_name1, :p_birth1, :p_sex1, :p_neut1, :c_name1, :c_phone1, :p_aleg1
+	from pet where p_name = 'Happy'; */ 
+
+{
+ struct sqlexd sqlstm;
+ sqlstm.sqlvsn = 13;
+ sqlstm.arrsiz = 7;
+ sqlstm.sqladtp = &sqladt;
+ sqlstm.sqltdsp = &sqltds;
+ sqlstm.stmt = "select p_name ,p_birth ,p_sex ,p_neut ,c_name ,c_phone ,p_al\
+eg into :b0,:b1,:b2,:b3,:b4,:b5,:b6  from pet where p_name='Happy'";
+ sqlstm.iters = (unsigned int  )1;
+ sqlstm.offset = (unsigned int  )44;
+ sqlstm.selerr = (unsigned short)1;
+ sqlstm.sqlpfmem = (unsigned int  )0;
+ sqlstm.cud = sqlcud0;
+ sqlstm.sqlest = (unsigned char  *)&sqlca;
+ sqlstm.sqlety = (unsigned short)4352;
+ sqlstm.occurs = (unsigned int  )0;
+ sqlstm.sqhstv[0] = (         void  *)p_name1;
+ sqlstm.sqhstl[0] = (unsigned int  )15;
+ sqlstm.sqhsts[0] = (         int  )0;
+ sqlstm.sqindv[0] = (         void  *)0;
+ sqlstm.sqinds[0] = (         int  )0;
+ sqlstm.sqharm[0] = (unsigned int  )0;
+ sqlstm.sqadto[0] = (unsigned short )0;
+ sqlstm.sqtdso[0] = (unsigned short )0;
+ sqlstm.sqhstv[1] = (         void  *)p_birth1;
+ sqlstm.sqhstl[1] = (unsigned int  )15;
+ sqlstm.sqhsts[1] = (         int  )0;
+ sqlstm.sqindv[1] = (         void  *)0;
+ sqlstm.sqinds[1] = (         int  )0;
+ sqlstm.sqharm[1] = (unsigned int  )0;
+ sqlstm.sqadto[1] = (unsigned short )0;
+ sqlstm.sqtdso[1] = (unsigned short )0;
+ sqlstm.sqhstv[2] = (         void  *)p_sex1;
+ sqlstm.sqhstl[2] = (unsigned int  )1;
+ sqlstm.sqhsts[2] = (         int  )0;
+ sqlstm.sqindv[2] = (         void  *)0;
+ sqlstm.sqinds[2] = (         int  )0;
+ sqlstm.sqharm[2] = (unsigned int  )0;
+ sqlstm.sqadto[2] = (unsigned short )0;
+ sqlstm.sqtdso[2] = (unsigned short )0;
+ sqlstm.sqhstv[3] = (         void  *)p_neut1;
+ sqlstm.sqhstl[3] = (unsigned int  )1;
+ sqlstm.sqhsts[3] = (         int  )0;
+ sqlstm.sqindv[3] = (         void  *)0;
+ sqlstm.sqinds[3] = (         int  )0;
+ sqlstm.sqharm[3] = (unsigned int  )0;
+ sqlstm.sqadto[3] = (unsigned short )0;
+ sqlstm.sqtdso[3] = (unsigned short )0;
+ sqlstm.sqhstv[4] = (         void  *)c_name1;
+ sqlstm.sqhstl[4] = (unsigned int  )15;
+ sqlstm.sqhsts[4] = (         int  )0;
+ sqlstm.sqindv[4] = (         void  *)0;
+ sqlstm.sqinds[4] = (         int  )0;
+ sqlstm.sqharm[4] = (unsigned int  )0;
+ sqlstm.sqadto[4] = (unsigned short )0;
+ sqlstm.sqtdso[4] = (unsigned short )0;
+ sqlstm.sqhstv[5] = (         void  *)c_phone1;
+ sqlstm.sqhstl[5] = (unsigned int  )20;
+ sqlstm.sqhsts[5] = (         int  )0;
+ sqlstm.sqindv[5] = (         void  *)0;
+ sqlstm.sqinds[5] = (         int  )0;
+ sqlstm.sqharm[5] = (unsigned int  )0;
+ sqlstm.sqadto[5] = (unsigned short )0;
+ sqlstm.sqtdso[5] = (unsigned short )0;
+ sqlstm.sqhstv[6] = (         void  *)p_aleg1;
+ sqlstm.sqhstl[6] = (unsigned int  )20;
+ sqlstm.sqhsts[6] = (         int  )0;
+ sqlstm.sqindv[6] = (         void  *)0;
+ sqlstm.sqinds[6] = (         int  )0;
+ sqlstm.sqharm[6] = (unsigned int  )0;
+ sqlstm.sqadto[6] = (unsigned short )0;
+ sqlstm.sqtdso[6] = (unsigned short )0;
+ sqlstm.sqphsv = sqlstm.sqhstv;
+ sqlstm.sqphsl = sqlstm.sqhstl;
+ sqlstm.sqphss = sqlstm.sqhsts;
+ sqlstm.sqpind = sqlstm.sqindv;
+ sqlstm.sqpins = sqlstm.sqinds;
+ sqlstm.sqparm = sqlstm.sqharm;
+ sqlstm.sqparc = sqlstm.sqharc;
+ sqlstm.sqpadto = sqlstm.sqadto;
+ sqlstm.sqptdso = sqlstm.sqtdso;
+ sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+}
+
+
+
+	//EXEC SQL select count(*)
+
+
 	//printf("emp 테이블에서 연봉이 5000인 사원번호, 이름, 직무, 매니저의 사원번호, 부서번호를 출력\n\n");
 
 	//printf("사원번호 : %d, 이름 : %s, 직무 : %s, \n연봉 : %d, 부서번호 : %d", emp_no, e_name, job, sal, deptno);
+	//printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
+	//printf("전화번호 : %s", c_phone1); 
+	//printf("동물이름 : %s, 동물생일 : %s, 성별 : %s, 중성화 : %s, 알러지유무 : %s, 보호자이름 : %s, 보호자전화번호 : %s", p_name1, p_birth1, p_sex1, p_neut1, p_aleg1, c_name1, c_phone1);
 }
 
 void DB_connect() {
-   strcpy((char *)uid.arr, "AA20153263@//sedb.deu.ac.kr:1521/orcl");
+   strcpy((char *)uid.arr, "zstB3@//sedb.deu.ac.kr:1521/orcl");
    uid.len = (short) strlen((char *)uid.arr);
-   strcpy((char *)pwd.arr, "20153263");
+   strcpy((char *)pwd.arr, "sedb1234");
    pwd.len = (short) strlen((char *)pwd.arr);
    
    /* EXEC SQL CONNECT :uid IDENTIFIED BY :pwd; */ 
@@ -282,11 +405,11 @@ void DB_connect() {
 {
    struct sqlexd sqlstm;
    sqlstm.sqlvsn = 13;
-   sqlstm.arrsiz = 6;
+   sqlstm.arrsiz = 7;
    sqlstm.sqladtp = &sqladt;
    sqlstm.sqltdsp = &sqltds;
    sqlstm.iters = (unsigned int  )10;
-   sqlstm.offset = (unsigned int  )44;
+   sqlstm.offset = (unsigned int  )87;
    sqlstm.cud = sqlcud0;
    sqlstm.sqlest = (unsigned char  *)&sqlca;
    sqlstm.sqlety = (unsigned short)4352;
@@ -348,11 +471,11 @@ void sql_error(char *msg) {
 {
    struct sqlexd sqlstm;
    sqlstm.sqlvsn = 13;
-   sqlstm.arrsiz = 6;
+   sqlstm.arrsiz = 7;
    sqlstm.sqladtp = &sqladt;
    sqlstm.sqltdsp = &sqltds;
    sqlstm.iters = (unsigned int  )1;
-   sqlstm.offset = (unsigned int  )75;
+   sqlstm.offset = (unsigned int  )118;
    sqlstm.cud = sqlcud0;
    sqlstm.sqlest = (unsigned char  *)&sqlca;
    sqlstm.sqlety = (unsigned short)4352;
