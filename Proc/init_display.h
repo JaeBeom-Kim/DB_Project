@@ -23,3 +23,4 @@ void gotoxy(int, int);
 int keyControl();
 int menuDraw();
 void init_display();
+void push_esc();

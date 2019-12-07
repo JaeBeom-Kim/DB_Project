@@ -10,13 +10,51 @@ void gotoxy(int, int);
 int keyControl();
 int menuDraw();
 void init_display();
+void push_esc();
+void logo();
 void init();
 
 void init() {
-	system("mode con cols=130 lines=35 | title 댕댕!");
+	system("mode con cols=130 lines=35 | title 댕댕!!");
+}
+
+void push_esc() {
+	printf("계속하시려면 ENTER를, 메인 화면으로 돌아가시려면 ESC를 누르세요\n");
+	int temp = _getch();
+	if (temp == 27) {
+		system("cls");
+		init_display();
+	}
 }
 
 void init_display() {
+	while (1) {
+		
+		int menuCode = menuDraw();
+		
+		switch (menuCode) {
+		case 0:
+			//고객등록
+			system("cls");
+			sql_insert_customer();
+			break;
+		case 1:
+			//고객조회
+			system("cls");
+			sql_select();
+			break;
+		case 2:
+			system("cls");
+			sql_update_customer();
+			break;
+		case 3:
+			exit(0);	 //종료
+		}
+		system("cls");
+	}
+}
+
+void logo() {
 	printf("\n\n\n\n");
 	printf("---------------------------------------------------\n\n");
 	printf("    ######  #  #        ######  #  #         ######\n");
@@ -30,8 +68,6 @@ void init_display() {
 	printf("       #######             #######           #\n");
 	printf("\n");
 	printf("---------------------------------------------------\n");
-
-	menuDraw();
 }
 
 void gotoxy(int x, int y) {
@@ -43,24 +79,28 @@ void gotoxy(int x, int y) {
 }
 
 int keyControl() {
-	char temp = _getch();
+	int temp = _getch();
 
-	if (temp == 'w' || temp == 'W')
+	if (temp == 72)
 		return UP;
-	else if (temp == 's' || temp == 'S')
+	else if (temp == 80)
 		return DOWN;
-	else if (temp == ' ')
+	else if (temp == 32)
 		return SUBMIT;
 }
 
 int menuDraw() {
 	int x = 20;
 	int y = 18;
+	gotoxy(x + 19, y);
+	logo();
 	gotoxy(x - 2, y);
 	printf("> 회원등록");
 	gotoxy(x, y + 1);
 	printf("회원조회");
 	gotoxy(x, y + 2);
+	printf("회원정보수정");
+	gotoxy(x, y + 3);
 	printf("  종료  ");
 	while (1) {
 		int n = keyControl();
@@ -76,7 +116,7 @@ int menuDraw() {
 			}
 
 			case DOWN: {
-				if (y < 20) {
+				if (y < 21) {
 					gotoxy(x - 2, y);
 					printf(" ");
 					gotoxy(x - 2, ++y);
