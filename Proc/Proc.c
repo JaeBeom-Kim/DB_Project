@@ -60,16 +60,16 @@ static struct sqltdss sqltds =
 struct sqlcxp
 {
   unsigned short fillen;
-           char  filnam[52];
+           char  filnam[16];
 };
 static const struct sqlcxp sqlfpn =
 {
-    51,
-    "C:\\DB_Project-master\\DB_Project-master\\Proc\\Proc.pc"
+    15,
+    "C:\\Proc\\Proc.pc"
 };
 
 
-static unsigned int sqlctx = 312557027;
+static unsigned int sqlctx = 2276835;
 
 
 static struct sqlexd {
@@ -135,12 +135,16 @@ typedef struct { unsigned short len; unsigned char arr[1]; } varchar;
 /* cud (compilation unit data) array */
 static const short sqlcud0[] =
 {13,4130,1,0,0,
-5,0,0,1,96,0,4,59,0,0,6,0,0,1,0,2,3,0,0,2,97,0,0,2,97,0,0,2,3,0,0,2,3,0,0,2,3,
-0,0,
-44,0,0,2,126,0,4,65,0,0,7,0,0,1,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,0,
-2,97,0,0,2,97,0,0,
-87,0,0,0,0,0,27,85,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,10,0,0,1,10,0,0,
-118,0,0,4,0,0,31,103,0,0,0,0,0,1,0,
+5,0,0,1,65,0,3,57,0,0,3,3,0,1,0,1,97,0,0,1,97,0,0,1,97,0,0,
+32,0,0,2,0,0,30,58,0,0,0,0,0,1,0,
+47,0,0,3,40,0,2,102,0,0,1,1,0,1,0,1,97,0,0,
+66,0,0,4,0,0,30,104,0,0,0,0,0,1,0,
+81,0,0,5,96,0,4,130,0,0,6,0,0,1,0,2,3,0,0,2,97,0,0,2,97,0,0,2,3,0,0,2,3,0,0,2,
+3,0,0,
+120,0,0,6,126,0,4,136,0,0,7,0,0,1,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,0,2,97,0,
+0,2,97,0,0,2,97,0,0,
+163,0,0,0,0,0,27,156,0,0,4,4,0,1,0,1,9,0,0,1,9,0,0,1,10,0,0,1,10,0,0,
+194,0,0,8,0,0,31,174,0,0,0,0,0,1,0,
 };
 
 
@@ -152,6 +156,9 @@ static const short sqlcud0[] =
 
 void DB_connect();
 void sql_select();
+void sql_insert_customer();
+void sql_update_customer();
+void sql_delete_customer();
 void sql_error(char *msg);
 
 /* EXEC SQL BEGIN DECLARE SECTION; */ 
@@ -168,10 +175,13 @@ struct { unsigned short len; unsigned char arr[20]; } pwd;
 #define getch()  _getch()
 
 void main() {
-	init();
+	//init();
    DB_connect();
+   sql_insert_customer();
+   //sql_update_customer();
+   //sql_delete_customer();
    //sql_select();
-   while(1){
+   /*while(1){
 		init_display();
 		int menuCode = menuDraw();
 		if(menuCode == 0){
@@ -182,9 +192,199 @@ void main() {
 			return 0;	//종료
 		}
 		system("cls");
-   }
+   }*/
    return 0;
 }
+
+void sql_insert_customer(){
+	/* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+		char c_name1[15];
+		char c_phone1[15];
+		char c_adrs1[50];
+	/* EXEC SQL END DECLARE SECTION; */ 
+
+
+	printf("\n고객 이름 : ");
+	scanf("%s", c_name1);
+	printf("전화 번호 : ");
+	scanf("%s", c_phone1);
+	printf("주소 : ");
+	scanf("%s", c_adrs1);
+
+	/* EXEC SQL INSERT INTO customer (c_name, c_phone, c_adrs) VALUES ( :c_name1, :c_phone1, :c_adrs1); */ 
+
+{
+ struct sqlexd sqlstm;
+ sqlstm.sqlvsn = 13;
+ sqlstm.arrsiz = 3;
+ sqlstm.sqladtp = &sqladt;
+ sqlstm.sqltdsp = &sqltds;
+ sqlstm.stmt = "insert into customer (c_name,c_phone,c_adrs) values (:b0,:b1\
+,:b2)";
+ sqlstm.iters = (unsigned int  )1;
+ sqlstm.offset = (unsigned int  )5;
+ sqlstm.cud = sqlcud0;
+ sqlstm.sqlest = (unsigned char  *)&sqlca;
+ sqlstm.sqlety = (unsigned short)4352;
+ sqlstm.occurs = (unsigned int  )0;
+ sqlstm.sqhstv[0] = (         void  *)c_name1;
+ sqlstm.sqhstl[0] = (unsigned int  )15;
+ sqlstm.sqhsts[0] = (         int  )0;
+ sqlstm.sqindv[0] = (         void  *)0;
+ sqlstm.sqinds[0] = (         int  )0;
+ sqlstm.sqharm[0] = (unsigned int  )0;
+ sqlstm.sqadto[0] = (unsigned short )0;
+ sqlstm.sqtdso[0] = (unsigned short )0;
+ sqlstm.sqhstv[1] = (         void  *)c_phone1;
+ sqlstm.sqhstl[1] = (unsigned int  )15;
+ sqlstm.sqhsts[1] = (         int  )0;
+ sqlstm.sqindv[1] = (         void  *)0;
+ sqlstm.sqinds[1] = (         int  )0;
+ sqlstm.sqharm[1] = (unsigned int  )0;
+ sqlstm.sqadto[1] = (unsigned short )0;
+ sqlstm.sqtdso[1] = (unsigned short )0;
+ sqlstm.sqhstv[2] = (         void  *)c_adrs1;
+ sqlstm.sqhstl[2] = (unsigned int  )50;
+ sqlstm.sqhsts[2] = (         int  )0;
+ sqlstm.sqindv[2] = (         void  *)0;
+ sqlstm.sqinds[2] = (         int  )0;
+ sqlstm.sqharm[2] = (unsigned int  )0;
+ sqlstm.sqadto[2] = (unsigned short )0;
+ sqlstm.sqtdso[2] = (unsigned short )0;
+ sqlstm.sqphsv = sqlstm.sqhstv;
+ sqlstm.sqphsl = sqlstm.sqhstl;
+ sqlstm.sqphss = sqlstm.sqhsts;
+ sqlstm.sqpind = sqlstm.sqindv;
+ sqlstm.sqpins = sqlstm.sqinds;
+ sqlstm.sqparm = sqlstm.sqharm;
+ sqlstm.sqparc = sqlstm.sqharc;
+ sqlstm.sqpadto = sqlstm.sqadto;
+ sqlstm.sqptdso = sqlstm.sqtdso;
+ sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+}
+
+
+	/* EXEC SQL COMMIT WORK RELEASE; */ 
+
+{
+ struct sqlexd sqlstm;
+ sqlstm.sqlvsn = 13;
+ sqlstm.arrsiz = 3;
+ sqlstm.sqladtp = &sqladt;
+ sqlstm.sqltdsp = &sqltds;
+ sqlstm.iters = (unsigned int  )1;
+ sqlstm.offset = (unsigned int  )32;
+ sqlstm.cud = sqlcud0;
+ sqlstm.sqlest = (unsigned char  *)&sqlca;
+ sqlstm.sqlety = (unsigned short)4352;
+ sqlstm.occurs = (unsigned int  )0;
+ sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+}
+
+
+}
+
+/*void sql_update_customer(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char c_phone[20];
+		char c_phone1[20];
+		char c_phone3[20];
+
+		char c_name1[15];
+		char c_phone2[20];
+		char c_adrs1[50];
+		int c_point1;
+	EXEC SQL END DECLARE SECTION;
+
+	printf("변경할 고객의 전화번호 입력 : ");
+	scanf("%s", c_phone);
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone3, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone;
+
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone3, c_adrs1, c_point1);
+	printf("\n변경할 전화번호 : ");
+	scanf("%s", c_phone1);
+
+	EXEC SQL UPDATE customer SET c_phone = :c_phone1 WHERE c_phone = :c_phone;
+	EXEC SQL COMMIT WORK RELEASE;
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone1;
+
+	printf("\n변경 후\n");
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
+	
+	
+}*/
+
+void sql_delete_customer(){
+	/* EXEC SQL BEGIN DECLARE SECTION; */ 
+
+		char c_phone1[20];
+	/* EXEC SQL END DECLARE SECTION; */ 
+
+
+	printf("삭제 할 고객 전화번호 : ");
+	scanf("%s", c_phone1);
+	/* EXEC SQL DELETE customer where c_phone = :c_phone1; */ 
+
+{
+ struct sqlexd sqlstm;
+ sqlstm.sqlvsn = 13;
+ sqlstm.arrsiz = 3;
+ sqlstm.sqladtp = &sqladt;
+ sqlstm.sqltdsp = &sqltds;
+ sqlstm.stmt = "delete  from customer  where c_phone=:b0";
+ sqlstm.iters = (unsigned int  )1;
+ sqlstm.offset = (unsigned int  )47;
+ sqlstm.cud = sqlcud0;
+ sqlstm.sqlest = (unsigned char  *)&sqlca;
+ sqlstm.sqlety = (unsigned short)4352;
+ sqlstm.occurs = (unsigned int  )0;
+ sqlstm.sqhstv[0] = (         void  *)c_phone1;
+ sqlstm.sqhstl[0] = (unsigned int  )20;
+ sqlstm.sqhsts[0] = (         int  )0;
+ sqlstm.sqindv[0] = (         void  *)0;
+ sqlstm.sqinds[0] = (         int  )0;
+ sqlstm.sqharm[0] = (unsigned int  )0;
+ sqlstm.sqadto[0] = (unsigned short )0;
+ sqlstm.sqtdso[0] = (unsigned short )0;
+ sqlstm.sqphsv = sqlstm.sqhstv;
+ sqlstm.sqphsl = sqlstm.sqhstl;
+ sqlstm.sqphss = sqlstm.sqhsts;
+ sqlstm.sqpind = sqlstm.sqindv;
+ sqlstm.sqpins = sqlstm.sqinds;
+ sqlstm.sqparm = sqlstm.sqharm;
+ sqlstm.sqparc = sqlstm.sqharc;
+ sqlstm.sqpadto = sqlstm.sqadto;
+ sqlstm.sqptdso = sqlstm.sqtdso;
+ sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+}
+
+
+
+	/* EXEC SQL COMMIT WORK RELEASE; */ 
+
+{
+ struct sqlexd sqlstm;
+ sqlstm.sqlvsn = 13;
+ sqlstm.arrsiz = 3;
+ sqlstm.sqladtp = &sqladt;
+ sqlstm.sqltdsp = &sqltds;
+ sqlstm.iters = (unsigned int  )1;
+ sqlstm.offset = (unsigned int  )66;
+ sqlstm.cud = sqlcud0;
+ sqlstm.sqlest = (unsigned char  *)&sqlca;
+ sqlstm.sqlety = (unsigned short)4352;
+ sqlstm.occurs = (unsigned int  )0;
+ sqlcxt((void **)0, &sqlctx, &sqlstm, &sqlfpn);
+}
+
+
+} 
+
 void sql_select(){
 	/* EXEC SQL BEGIN DECLARE SECTION; */ 
 
@@ -222,7 +422,7 @@ void sql_select(){
  sqlstm.stmt = "select empno ,ename ,job ,mgr ,sal ,deptno into :b0,:b1,:b2,\
 :b3,:b4,:b5  from emp where sal=5000";
  sqlstm.iters = (unsigned int  )1;
- sqlstm.offset = (unsigned int  )5;
+ sqlstm.offset = (unsigned int  )81;
  sqlstm.selerr = (unsigned short)1;
  sqlstm.sqlpfmem = (unsigned int  )0;
  sqlstm.cud = sqlcud0;
@@ -306,7 +506,7 @@ void sql_select(){
  sqlstm.stmt = "select p_name ,p_birth ,p_sex ,p_neut ,c_name ,c_phone ,p_al\
 eg into :b0,:b1,:b2,:b3,:b4,:b5,:b6  from pet where p_name='Happy'";
  sqlstm.iters = (unsigned int  )1;
- sqlstm.offset = (unsigned int  )44;
+ sqlstm.offset = (unsigned int  )120;
  sqlstm.selerr = (unsigned short)1;
  sqlstm.sqlpfmem = (unsigned int  )0;
  sqlstm.cud = sqlcud0;
@@ -409,7 +609,7 @@ void DB_connect() {
    sqlstm.sqladtp = &sqladt;
    sqlstm.sqltdsp = &sqltds;
    sqlstm.iters = (unsigned int  )10;
-   sqlstm.offset = (unsigned int  )87;
+   sqlstm.offset = (unsigned int  )163;
    sqlstm.cud = sqlcud0;
    sqlstm.sqlest = (unsigned char  *)&sqlca;
    sqlstm.sqlety = (unsigned short)4352;
@@ -475,7 +675,7 @@ void sql_error(char *msg) {
    sqlstm.sqladtp = &sqladt;
    sqlstm.sqltdsp = &sqltds;
    sqlstm.iters = (unsigned int  )1;
-   sqlstm.offset = (unsigned int  )118;
+   sqlstm.offset = (unsigned int  )194;
    sqlstm.cud = sqlcud0;
    sqlstm.sqlest = (unsigned char  *)&sqlca;
    sqlstm.sqlety = (unsigned short)4352;

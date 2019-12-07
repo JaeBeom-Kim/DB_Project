@@ -6,6 +6,9 @@
 
 void DB_connect();
 void sql_select();
+void sql_insert_customer();
+void sql_update_customer();
+void sql_delete_customer();
 void sql_error(char *msg);
 
 EXEC SQL BEGIN DECLARE SECTION;
@@ -16,10 +19,13 @@ EXEC SQL END DECLARE SECTION;
 #define getch()  _getch()
 
 void main() {
-	init();
+	//init();
    DB_connect();
+   sql_insert_customer();
+   //sql_update_customer();
+   //sql_delete_customer();
    //sql_select();
-   while(1){
+   /*while(1){
 		init_display();
 		int menuCode = menuDraw();
 		if(menuCode == 0){
@@ -30,9 +36,74 @@ void main() {
 			return 0;	//종료
 		}
 		system("cls");
-   }
+   }*/
    return 0;
 }
+
+void sql_insert_customer(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char c_name1[15];
+		char c_phone1[15];
+		char c_adrs1[50];
+	EXEC SQL END DECLARE SECTION;
+
+	printf("\n고객 이름 : ");
+	scanf("%s", c_name1);
+	printf("전화 번호 : ");
+	scanf("%s", c_phone1);
+	printf("주소 : ");
+	scanf("%s", c_adrs1);
+
+	EXEC SQL INSERT INTO customer (c_name, c_phone, c_adrs) VALUES ( :c_name1, :c_phone1, :c_adrs1);
+	EXEC SQL COMMIT WORK RELEASE;
+}
+
+/*void sql_update_customer(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char c_phone[20];
+		char c_phone1[20];
+		char c_phone3[20];
+
+		char c_name1[15];
+		char c_phone2[20];
+		char c_adrs1[50];
+		int c_point1;
+	EXEC SQL END DECLARE SECTION;
+
+	printf("변경할 고객의 전화번호 입력 : ");
+	scanf("%s", c_phone);
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone3, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone;
+
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone3, c_adrs1, c_point1);
+	printf("\n변경할 전화번호 : ");
+	scanf("%s", c_phone1);
+
+	EXEC SQL UPDATE customer SET c_phone = :c_phone1 WHERE c_phone = :c_phone;
+	EXEC SQL COMMIT WORK RELEASE;
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone1;
+
+	printf("\n변경 후\n");
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
+	
+	
+}*/
+
+void sql_delete_customer(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char c_phone1[20];
+	EXEC SQL END DECLARE SECTION;
+
+	printf("삭제 할 고객 전화번호 : ");
+	scanf("%s", c_phone1);
+	EXEC SQL DELETE customer where c_phone = :c_phone1;
+
+	EXEC SQL COMMIT WORK RELEASE;
+} 
+
 void sql_select(){
 	EXEC SQL BEGIN DECLARE SECTION;
 		int emp_no;
