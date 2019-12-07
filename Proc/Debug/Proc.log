@@ -1,13 +1,15 @@
 ﻿  Performing Custom Build Tools
   
-  Pro*C/C++: Release 12.1.0.2.0 - Production on Sat Dec 7 18:00:46 2019
+  Pro*C/C++: Release 12.1.0.2.0 - Production on Sat Dec 7 19:09:11 2019
   
   Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
   
   System default option values taken from: c:\proc_sdk\precomp\admin\pcscfg.cfg
   
   Proc.c
-c:\proc\proc.c(196): warning C4098: 'main': 'void' 함수에서 값을 반환하고 있습니다.
-c:\proc\proc.c(401): warning C4101: 'c_point1' :참조되지 않은 지역 변수입니다.
-c:\proc\proc.c(400): warning C4101: 'c_adrs1' :참조되지 않은 지역 변수입니다.
+c:\proc\proc.c(200): warning C4098: 'main': 'void' 함수에서 값을 반환하고 있습니다.
+c:\proc\proc.c(300): warning C4101: 'c_phone2' :참조되지 않은 지역 변수입니다.
+c:\proc\proc.c(297): warning C4101: 'c_phone3' :참조되지 않은 지역 변수입니다.
+c:\proc\proc.c(608): warning C4101: 'c_point1' :참조되지 않은 지역 변수입니다.
+c:\proc\proc.c(607): warning C4101: 'c_adrs1' :참조되지 않은 지역 변수입니다.
   Proc.vcxproj -> C:\Proc\Debug\Proc.exe

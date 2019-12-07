@@ -21,8 +21,8 @@ EXEC SQL END DECLARE SECTION;
 void main() {
 	//init();
    DB_connect();
-   sql_insert_customer();
-   //sql_update_customer();
+   //sql_insert_customer();
+   sql_update_customer();
    //sql_delete_customer();
    //sql_select();
    /*while(1){
@@ -58,7 +58,7 @@ void sql_insert_customer(){
 	EXEC SQL COMMIT WORK RELEASE;
 }
 
-/*void sql_update_customer(){
+void sql_update_customer(){
 	EXEC SQL BEGIN DECLARE SECTION;
 		char c_phone[20];
 		char c_phone1[20];
@@ -68,29 +68,30 @@ void sql_insert_customer(){
 		char c_phone2[20];
 		char c_adrs1[50];
 		int c_point1;
+		int c_point2;
 	EXEC SQL END DECLARE SECTION;
 
 	printf("변경할 고객의 전화번호 입력 : ");
 	scanf("%s", c_phone);
 
-	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone3, :c_adrs1, :c_point1
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone, :c_adrs1, :c_point1
 	from customer where c_phone = :c_phone;
 
-	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone3, c_adrs1, c_point1);
-	printf("\n변경할 전화번호 : ");
-	scanf("%s", c_phone1);
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone, c_adrs1, c_point1);
+	printf("\n변경할 포인트 : ");
+	scanf("%d", &c_point2);
 
-	EXEC SQL UPDATE customer SET c_phone = :c_phone1 WHERE c_phone = :c_phone;
-	EXEC SQL COMMIT WORK RELEASE;
+	EXEC SQL UPDATE customer SET c_point = :c_point2 WHERE c_phone = :c_phone;
+	EXEC SQL COMMIT WORK;
 
 	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
-	from customer where c_phone = :c_phone1;
+	from customer where c_phone = :c_phone;
 
 	printf("\n변경 후\n");
 	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
 	
 	
-}*/
+}
 
 void sql_delete_customer(){
 	EXEC SQL BEGIN DECLARE SECTION;
