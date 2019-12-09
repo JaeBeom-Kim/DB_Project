@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#include <Windows.h>
 #include "init_display.h"
 
 /* for oracle */

@@ -5,10 +5,12 @@
 #include "init_display.h"
 
 void DB_connect();
-void sql_select();
+void sql_select_customer();
 void sql_insert_customer();
 void sql_update_customer();
 void sql_delete_customer();
+void sql_insert_pet();
+void sql_insert_product();
 void sql_error(char *msg);
 
 EXEC SQL BEGIN DECLARE SECTION;
@@ -19,12 +21,8 @@ EXEC SQL END DECLARE SECTION;
 #define getch()  _getch()
 
 void main() {
-	//init();
+	init();
    DB_connect();
-   //sql_insert_customer();
-   //sql_update_customer();
-   //sql_delete_customer();
-   //sql_select();
    init_display();
    return 0;
 }
@@ -35,6 +33,8 @@ void sql_insert_customer(){
 		char c_name1[15];
 		char c_phone1[15];
 		char c_adrs1[50];
+		int count=0;
+		int point=0;
 	EXEC SQL END DECLARE SECTION;
 
 	printf("\n고객 이름 : ");
@@ -43,10 +43,57 @@ void sql_insert_customer(){
 	scanf("%s", c_phone1);
 	printf("주소 : ");
 	scanf("%s", c_adrs1);
-
-	EXEC SQL INSERT INTO customer (c_name, c_phone, c_adrs) VALUES ( :c_name1, :c_phone1, :c_adrs1);
-	EXEC SQL COMMIT WORK RELEASE;
 	
+	EXEC SQL SELECT count(*) into :count from customer;
+
+	EXEC SQL INSERT INTO customer (c_num, c_name, c_phone, c_adrs, c_point) VALUES (:count+1, :c_name1, :c_phone1, :c_adrs1, :point);
+	EXEC SQL COMMIT WORK RELEASE;
+
+	printf("%s 회원이 등록되었습니다.\n\n3초 후 메인화면으로 돌아갑니다.", c_name1);
+}
+
+void sql_insert_pet(){
+	push_esc();
+	EXEC SQL BEGIN DECLARE SECTION;
+		char p_name1[20];
+		char p_birth1[20];
+		char p_sex1[10];
+		char p_neut1[10];
+		char c_name1[20];
+		char c_phone1[20];
+		char c_phone2[20];
+		char p_aleg1[50];
+	EXEC SQL END DECLARE SECTION;
+
+	printf("고객 전화번호 입력 : ");
+	scanf("%s", c_phone1);
+	
+	EXEC SQL SELECT c_name, c_phone into :c_name1, :c_phone2 FROM customer WHERE c_phone = :c_phone1;
+
+	if(sqlca.sqlcode == 1403){
+		printf("\n등록되지 않은 회원입니다. 3초 후 메인화면으로 이동합니다.");
+	}
+	else{
+		printf("고객 이름 : %s\n전화번호 : %s", c_name1, c_phone2);
+	
+		/*printf("\n동물 이름 : ");
+		scanf("%s", p_name1);
+		printf("동물 생일 : ");
+		scanf("%s", p_birth1);
+		printf("성별(M/F) : ");
+		scanf("%s", p_sex1);
+		printf("중성화 유무(Y/N) : ");
+		scanf("%s", p_neut1);
+		printf("알러지 : ");
+		scanf("%s", p_aleg1);*/
+
+		//EXEC SQL INSERT INTO pet (p_name, p_birth, p_sex, p_neut, c_phone, p_aleg) VALUES (:p_name1, :p_birth1, :p_sex1, :p_neut1, :c_phone2, :p_aleg1);
+		EXEC SQL INSERT INTO pet (p_name, p_birth, p_sex, p_neut, c_phone, p_aleg) VALUES ('mongmong', '010917', 'M','N','123123','N');
+		EXEC SQL COMMIT WORK;
+
+		printf("동물이 등록되었습니다.\n\n3초 후 메인화면으로 이동합니다.");
+
+	}
 }
 
 void sql_update_customer(){
@@ -66,24 +113,12 @@ void sql_update_customer(){
 	printf("변경할 고객의 전화번호 입력 : ");
 	scanf("%s", c_phone);
 
-	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone, :c_adrs1, :c_point1
-	from customer where c_phone = :c_phone;
-
-	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone, c_adrs1, c_point1);
-	printf("\n변경할 포인트 : ");
-	scanf("%d", &c_point2);
-
-	EXEC SQL UPDATE customer SET c_point = :c_point2 WHERE c_phone = :c_phone;
+	EXEC SQL update customer set c_point = 6000 where c_phone = :c_phone1;
 	EXEC SQL COMMIT WORK;
 
-	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
-	from customer where c_phone = :c_phone;
-
 	printf("\n변경 후\n");
-	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
-	scanf("%d", &c_point1);
-	
-	
+
+	//printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
 }
 
 void sql_delete_customer(){
@@ -98,48 +133,89 @@ void sql_delete_customer(){
 	EXEC SQL COMMIT WORK RELEASE;
 } 
 
-void sql_select(){
-	EXEC SQL BEGIN DECLARE SECTION;
-		int emp_no;
-		char e_name[10];
-		char job[10];
-		int mgr;
-		int sal;
-		int deptno;
 
-		char c_name1[15];
+
+void sql_select_customer(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char c_phone[20];
+		char c_num1[3];
+		char c_name1[20];
 		char c_phone1[20];
-		char c_adrs1[50];
+		char c_adrs1[100];
 		int c_point1;
 
-		char p_name1[15];
-		char p_birth1[15];
-		char p_sex1[1];
-		char p_neut1[1];
-		char p_aleg1[20];
+		char p_name1[20];
+		char p_birth1[30];
+		char p_sex1[2];
+		char p_neut1[2];
+		char c_phone2[20];
+		char p_aleg1[50];
 
+		int count;
 	EXEC SQL END DECLARE SECTION;
 
+	printf("전화번호를 입력하세요 : ");
+	scanf("%s", c_phone);
 
-	EXEC SQL select empno, ename, job, mgr, sal, deptno into : emp_no, :e_name, :job, :mgr, :sal, :deptno
-	from emp where sal = 5000;
+	EXEC SQL select c_num, c_name, c_phone, c_adrs, c_point into :c_num1, :c_name1, c_phone1, c_adrs1, c_point1 from customer where c_phone = :c_phone;
+	printf("고객번호 : %s\n고객이름 : %s\n전화번호 : %s\n주소 : %s\n포인트 : %d\n", c_num1, c_name1, c_phone1, c_adrs1, c_point1);
 
-	//EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
-	//from customer where c_name = 'KimJaeBeom';
+	EXEC SQL select count(*) into :count from (select p_name from pet where c_phone = :c_phone);
+
+	EXEC SQL DECLARE select_customer CURSOR FOR
+		SELECT P_NAME, P_BIRTH, P_SEX, P_NEUT, C_PHONE, P_ALEG
+		FROM pet where c_phone = :c_phone;
+
+	EXEC SQL OPEN select_customer;
+	for(int i=0;i<count;i++)
+	{
+		EXEC SQL FETCH select_customer INTO :p_name1, :p_birth1, :p_sex1, :p_neut1, :c_phone1, :p_aleg1;
+		printf("P_NAME = [%s], P_BIRTH = [%s], P_SEX = [%s], P_NEUT = [%s], C_PHONE = [%s], P_ALEG = [%s]\n", p_name1, p_birth1, p_sex1, p_neut1, c_phone1, p_aleg1);
+	}
+	EXEC SQL CLOSE select_customer;
+
 	
-	EXEC SQL select p_name, p_birth, p_sex, p_neut, c_name, c_phone, p_aleg into :p_name1, :p_birth1, :p_sex1, :p_neut1, :c_name1, :c_phone1, :p_aleg1
-	from pet where p_name = 'Happy';
-
-	//EXEC SQL select count(*)
-
-
-	//printf("emp 테이블에서 연봉이 5000인 사원번호, 이름, 직무, 매니저의 사원번호, 부서번호를 출력\n\n");
-
 	//printf("사원번호 : %d, 이름 : %s, 직무 : %s, \n연봉 : %d, 부서번호 : %d", emp_no, e_name, job, sal, deptno);
 	//printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
 	//printf("전화번호 : %s", c_phone1); 
 	//printf("동물이름 : %s, 동물생일 : %s, 성별 : %s, 중성화 : %s, 알러지유무 : %s, 보호자이름 : %s, 보호자전화번호 : %s", p_name1, p_birth1, p_sex1, p_neut1, p_aleg1, c_name1, c_phone1);
 }
+
+void sql_insert_product(){
+	EXEC SQL BEGIN DECLARE SECTION;
+		char pro_name1[20];
+		char pro_com1[20];
+		char pro_ing1[20];
+		int pro_price1;
+	EXEC SQL END DECLARE SECTION;
+
+	printf("상품명 : ");
+	scanf("%s", pro_name1);
+	printf("제조사명 : ");
+	scanf("%s", pro_com1);
+	printf("주재료 : ");
+	scanf("%s", pro_ing1);
+	printf("가격 : ");
+	scanf("%d", &pro_price1);
+
+	EXEC SQL INSERT INTO product (pro_name, pro_com, pro_ing, pro_price) VALUES (:pro_name1, :pro_com1, :pro_ing1, :pro_price1);
+	EXEC SQL COMMIT WORK RELEASE;
+
+	printf("%s 상품이 등록되었습니다.\n\n3초 후 메인화면으로 돌아갑니다.", pro_name1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void DB_connect() {
    strcpy((char *)uid.arr, "zstB3@//sedb.deu.ac.kr:1521/orcl");
@@ -168,3 +244,25 @@ void sql_error(char *msg) {
    EXEC SQL ROLLBACK WORK;
    exit(-1);
 }
+
+/*/*printf("변경할 고객의 전화번호 입력 : ");
+	scanf("%s", c_phone);
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone;
+
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone, c_adrs1, c_point1);
+	printf("\n변경할 포인트 : ");
+	scanf("%d", &c_point2);
+
+	EXEC SQL UPDATE customer set c_point = 300 where c_phone = '4040';
+	//EXEC SQL UPDATE customer SET c_point = 2500 WHERE c_phone = :c_phone;
+
+	EXEC SQL COMMIT WORK;
+
+	EXEC SQL select c_name, c_phone, c_adrs, c_point into :c_name1, :c_phone1, :c_adrs1, :c_point1
+	from customer where c_phone = :c_phone;
+
+	printf("\n변경 후\n");
+	printf("고객이름 : %s, 전화번호 : %s, 주소 : %s, 포인트 : %d", c_name1, c_phone1, c_adrs1, c_point1);
+	scanf("%d", &c_point1);*/
