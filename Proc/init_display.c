@@ -12,16 +12,39 @@ int keyControl();
 int menuDraw();
 void init_display();
 void push_esc();
+void push_anykey();
 void logo();
 void init();
 void setcolor(unsigned short text, unsigned short back);//색깔
 
 void init() {
-	system("mode con cols=130 lines=35 | title 댕댕!!");
+	system("mode con cols=58 lines=30 | title 댕댕!!");
+
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = 0;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+
+	COORD bufferSize = { 116,150 };
+	SetConsoleScreenBufferSize(consoleHandle, bufferSize);
+}
+
+void init2() {
+	system("mode con cols=130 lines=30 | title 댕댕!!");
+
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+	ConsoleCursor.bVisible = 0;
+	ConsoleCursor.dwSize = 1;
+	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
+
+	COORD bufferSize = { 130,150 };
+	SetConsoleScreenBufferSize(consoleHandle, bufferSize);
 }
 
 void push_esc() {
-	printf("계속하시려면 ENTER를, 메인 화면으로 돌아가시려면 ESC를 누르세요\n\n");
+	printf("계속하시려면 아무 키를, 메인 화면으로 돌아가시려면 ESC 키를 입력하세요\n\n");
 	int temp = _getch();
 	if (temp == 27) { //esc
 		system("cls");
@@ -29,8 +52,18 @@ void push_esc() {
 	}
 }
 
+void push_anykey() {
+	printf("\n\n메인 화면으로 돌아가시려면 아무키나 입력하세요\n\n");
+	int temp = _getch();
+	if (temp < 100000) {
+		system("cls");
+		init_display();
+	}
+}
+
 void init_display() {
 	while (1) {
+		init();
 		logo();
 		int menuCode = menuDraw();
 		
@@ -57,12 +90,24 @@ void init_display() {
 			sql_update_customer();	//회원정보 수정
 			Sleep(sleeptime);
 			break;
-		case 4:
+		case 4:						//상품 구매
+			system("cls");
+			purchase();
+			break;
+		case 5:					//구매내역 조회
+			system("cls");
+			sql_select_history();
+			break;
+		case 6:						//상품 목록
+			system("cls");
+			sql_select_product();
+			break;
+		case 7:						//상품 등록
 			system("cls");
 			sql_insert_product();
 			Sleep(sleeptime);
 			break;
-		case 5:
+		case 8:
 			exit(0);	 //종료
 		}
 		system("cls");
@@ -70,22 +115,28 @@ void init_display() {
 }
 
 void logo() {
-	setcolor(11, 0);
-	printf("\n\n\n\n");
-	printf("---------------------------------------------------\n\n");
-	setcolor(14, 0);
-	printf("    ######  #  #        ######  #  #         ######\n");
-	printf("    #       #  #        #       #  #         #####\n");
-	printf("    #       ####        #       ####         ####\n");
-	printf("    #       #  #        #       #  #         ###\n");
-	printf("    ######  #  #        ######  #  #         ##\n");
-	printf("                                             #\n");
-	printf("       #######             #######           \n");
-	printf("      ##     ##           ##     ##          ##\n");
-	printf("       #######             #######           #\n");
-	setcolor(11, 0);
-	printf("\n");
-	printf("---------------------------------------------------\n");
+	setcolor(9, 15);
+	printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+	printf("■                                                    ■\n");
+	setcolor(11, 15);
+	printf("■----------------------------------------------------■\n");
+	printf("■                                                    ■\n");
+	setcolor(14, 15);
+	printf("■    ######  #  #       ######  #  #       ######    ■\n");
+	printf("■    #       #  #       #       #  #       #####     ■\n");
+	printf("■    #       ####       #       ####       ####      ■\n");
+	printf("■    #       #  #       #       #  #       ###       ■\n");
+	printf("■    ######  #  #       ######  #  #       ##        ■\n");
+	printf("■                                          #         ■\n");
+	printf("■       #######            #######                   ■\n");
+	printf("■      ##     ##          ##     ##        ##        ■\n");
+	printf("■       #######            #######         #         ■\n");
+	setcolor(11, 15);
+	printf("■                                                    ■\n");
+	printf("■----------------------------------------------------■\n");
+	setcolor(9, 15);
+	printf("■                                                    ■\n");
+	printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
 	setcolor(15, 0);
 }
 
@@ -109,7 +160,7 @@ int keyControl() {
 }
 
 int menuDraw() {
-	int x = 20;
+	int x = 22;
 	int y = 18;
 	gotoxy(x - 2, y);
 	printf("> 회원등록");
@@ -120,8 +171,14 @@ int menuDraw() {
 	gotoxy(x, y + 3);
 	printf("회원정보수정");
 	gotoxy(x, y + 4);
-	printf("제품 등록");
+	printf("상품구매");
 	gotoxy(x, y + 5);
+	printf("구매내역 조회");
+	gotoxy(x, y + 6);
+	printf("상품목록");
+	gotoxy(x, y + 7);
+	printf("상품등록");
+	gotoxy(x, y + 8);
 	printf("  종료  ");
 	while (1) {
 		int n = keyControl();
@@ -137,7 +194,7 @@ int menuDraw() {
 			}
 
 			case DOWN: {
-				if (y < 23) {
+				if (y < 26) {
 					gotoxy(x - 2, y);
 					printf(" ");
 					gotoxy(x - 2, ++y);
